@@ -31,6 +31,11 @@
                     ← Lihat Genre
                 </a>
             </div>
+            <div class="card-footer text-end">
+            <a href="{{ route('books.index') }}" class="btn btn-outline-primary">
+                Lihat Buku →
+            </a>
+        </div>
         </div>
     </div>
 @endsection

@@ -11,7 +11,6 @@ class AuthorController extends Controller
     // GET /api/authors
     public function index()
     {
-        // kalau mau ikut jumlah buku: Author::withCount('books')->orderBy('name')->get();
         $authors = Author::orderBy('name')->get();
 
         return response()->json([
@@ -44,5 +43,80 @@ class AuthorController extends Controller
             'message' => 'Author created',
             'data'    => $author,
         ], 201);
+    }
+
+    // GET /api/authors/{id}
+    public function show(string $id)
+    {
+        $author = Author::find($id);
+        if (!$author) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Author not found',
+                'data'    => null,
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Get author detail',
+            'data'    => $author,
+        ], 200);
+    }
+
+    // PUT/PATCH /api/authors/{id}
+    public function update(Request $request, string $id)
+    {
+        $author = Author::find($id);
+        if (!$author) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Author not found',
+                'data'    => null,
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            // abaikan unique untuk id yang sedang diupdate
+            'name' => 'required|string|max:150|unique:authors,name,' . $author->id,
+            'bio'  => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'data'    => $validator->errors(),
+            ], 422);
+        }
+
+        $author->update($validator->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Author updated',
+            'data'    => $author,
+        ], 200);
+    }
+
+    // DELETE /api/authors/{id}
+    public function destroy(string $id)
+    {
+        $author = Author::find($id);
+        if (!$author) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Author not found',
+                'data'    => null,
+            ], 404);
+        }
+
+        $author->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Author deleted',
+            'data'    => null,
+        ], 200);
     }
 }

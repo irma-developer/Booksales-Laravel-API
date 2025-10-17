@@ -9,8 +9,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            AuthorSeeder::class,
-            BookSeeder::class, // penting: BookSeeder setelah AuthorSeeder
+            AuthorSeeder::class, // author duluan
+            GenreSeeder::class,  // lalu genre
+            BookSeeder::class,   // terakhir book (butuh author_id & genre_id)
         ]);
     }
 }

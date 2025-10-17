@@ -1,24 +1,60 @@
 <?php
 
 namespace Database\Seeders;
-
 use App\Models\Book;
 use App\Models\Author;
+use App\Models\Genre;
 use Illuminate\Database\Seeder;
 
 class BookSeeder extends Seeder
 {
     public function run(): void
     {
-        // ambil id author biar rapi
-        $id = Author::pluck('id','name');
+        $fitzId = Author::firstOrCreate(
+            ['name' => 'F. Scott Fitzgerald'],
+            ['bio'  => 'Penulis Amerika']
+        )->id;
 
-        Book::insert([
-            ['title'=>'Laskar Pelangi','author_id'=>$id['Andrea Hirata'],'genre'=>'Fiction','published_year'=>2005,'price'=>85000,'description'=>'Novel ikonik Belitung','created_at'=>now(),'updated_at'=>now()],
-            ['title'=>'Bumi','author_id'=>$id['Tere Liye'],'genre'=>'Fantasy','published_year'=>2014,'price'=>78000,'description'=>'Petualangan Raib dkk','created_at'=>now(),'updated_at'=>now()],
-            ['title'=>'Supernova: Ksatria, Puteri & Bintang Jatuh','author_id'=>$id['Dewi Lestari'],'genre'=>'Fiction','published_year'=>2001,'price'=>90000,'description'=>'Fiksi filosofis','created_at'=>now(),'updated_at'=>now()],
-            ['title'=>'Titik Nol','author_id'=>$id['Agustinus Wibowo'],'genre'=>'Travel/Memoir','published_year'=>2013,'price'=>95000,'description'=>'Perjalanan & pulang','created_at'=>now(),'updated_at'=>now()],
-            ['title'=>'Sapiens','author_id'=>$id['Yuval N. Harari'],'genre'=>'Non-Fiction','published_year'=>2011,'price'=>120000,'description'=>'Sejarah singkat umat manusia','created_at'=>now(),'updated_at'=>now()],
-        ]);
+        $fictionId = Genre::firstOrCreate(
+            ['name' => 'Fiction'],
+            ['description' => 'Cerita rekaan/novel']
+        )->id;
+
+        $books = [
+            [
+                'title'          => 'The Great Gatsby',
+                'description'    => 'A novel written by American author F. Scott Fitzgerald.',
+                'price'          => 15000,
+                'stock'          => 30,                    // <-- WAJIB ada
+                'genre_id'       => $fictionId,
+                'author_id'      => $fitzId,
+                'cover_photo'    => 'great_gatsby.jpg',    // <-- WAJIB ada
+                'published_year' => 1925,
+            ],
+            [
+                'title'          => 'Tender Is the Night',
+                'description'    => 'Novel by F. Scott Fitzgerald.',
+                'price'          => 16000,
+                'stock'          => 25,
+                'genre_id'       => $fictionId,
+                'author_id'      => $fitzId,
+                'cover_photo'    => 'tender_is_the_night.jpg',
+                'published_year' => 1934,
+            ],
+            [
+                'title'          => 'This Side of Paradise',
+                'description'    => 'Debut novel by F. Scott Fitzgerald.',
+                'price'          => 14000,
+                'stock'          => 20,
+                'genre_id'       => $fictionId,
+                'author_id'      => $fitzId,
+                'cover_photo'    => 'this_side_of_paradise.jpg',
+                'published_year' => 1920,
+            ],
+        ];
+
+        foreach ($books as $b) {
+            Book::updateOrCreate(['title' => $b['title']], $b);
+        }
     }
 }

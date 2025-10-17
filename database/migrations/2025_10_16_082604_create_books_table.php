@@ -10,11 +10,13 @@ return new class extends Migration {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('author_id')->constrained('authors')->cascadeOnDelete();
-            $table->string('genre');                // simple string sesuai brief
+            $table->text('description');
+            $table->integer('price');
+            $table->integer('stock');
+            $table->unsignedBigInteger('genre_id');
+             $table->unsignedBigInteger('author_id');
+            $table->string('cover_photo');                // simple string sesuai brief
             $table->integer('published_year');
-            $table->decimal('price', 10, 2);
-            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

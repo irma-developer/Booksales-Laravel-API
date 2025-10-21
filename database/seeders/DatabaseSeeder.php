@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             GenreSeeder::class,  // lalu genre
             BookSeeder::class,   // terakhir book (butuh author_id & genre_id)
             UserSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }
